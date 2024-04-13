@@ -23,14 +23,15 @@ public class OrderService {
     }
 
     public Mono<Order> submitOrder(String isbn, int quantity) {
-        return this.bookClient.getBookByIsbn(isbn).map(book -> buildAcceptedOrder(book, quantity)).defaultIfEmpty(buildRejectedOrder(isbn, quantity)).flatMap(orderRepository::save);
+        return this.bookClient.getBookByIsbn(isbn).map(book -> buildAcceptedOrder(book, quantity))
+                .defaultIfEmpty(buildRejectedOrder(isbn, quantity)).flatMap(orderRepository::save);
         // return Mono.just(buildRejectedOrder(isbn, quantity))
         //         .flatMap(orderRepository::save);
     }
 
-    public static Order buildAcceptedOrder(
-            Book book, int quantity) {
-        return Order.of(book.isbn(), book.title() + " - " + book.author(), book.price(), quantity, OrderStatus.ACCEPTED);
+    public static Order buildAcceptedOrder(Book book, int quantity) {
+        return Order.of(book.isbn(), book.title() + " - " + book.author(), book.price(), quantity,
+                OrderStatus.ACCEPTED);
     }
 
     public static Order buildRejectedOrder(
