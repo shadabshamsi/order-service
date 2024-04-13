@@ -1,5 +1,6 @@
 package com.shadabshamsi.orderservice.order.web;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,5 +30,12 @@ public class OrderController {
   @PostMapping
   public Mono<Order> submitOrder(@RequestBody @Valid OrderRequest orderRequest) {
     return orderService.submitOrder(orderRequest.isbn(), orderRequest.quantity());
+  }
+
+  @Value("${spring.r2dbc.url}")
+  private String v;
+  @GetMapping("/hello")
+  public String hello() {
+    return v;
   }
 }
